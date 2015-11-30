@@ -9,10 +9,10 @@
 	</parent>
 	
 	<groupId>com.ywq.ssm</groupId>
-	<artifactId>webapp</artifactId>
+	<artifactId>ssm-webapp</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ssm Maven Webapp</name>
+	<name>ssm-webapp</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -237,12 +237,12 @@
 		
 		<dependency>
 			<groupId>com.ywq.ssm</groupId>
-			<artifactId>api</artifactId>
+			<artifactId>ssm-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.ywq.ssm</groupId>
-			<artifactId>api-impl</artifactId>
+			<artifactId>ssm-api-impl</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
