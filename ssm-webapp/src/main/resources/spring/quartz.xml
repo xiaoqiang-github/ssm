@@ -1,0 +1,54 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd ">
+
+	<!-- 配置任务 -->
+	<bean id="firstJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedulerService"/>
+		<property name="targetMethod" value="executeFirstTask"/>
+	</bean>
+	<bean id="secondJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="schedulerService"/>
+		<property name="targetMethod" value="executeSecondTask"/>
+	</bean>
+
+	<!-- 配置trigger -->
+	<bean id="firstSimpleTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="firstJobDetail"/>
+		<property name="repeatInterval" value="5000" />
+		<property name="startDelay" value="1000" />
+	</bean>
+	<bean id="secondCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="secondJobDetail"/>
+		<property name="cronExpression" value="0/12 * * * * ?" />
+	</bean>
+
+	<!-- 定义调度工厂 -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="firstSimpleTrigger"/>
+				<ref bean="secondCronTrigger"/>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 声明bean -->
+	<bean id="schedulerService" class="com.ywq.ssm.quartz.impl.SchedulerServiceImpl">
+		<property name="firstTask" ref="firstTask"/>
+		<property name="secondTask" ref="secondTask"/>
+	</bean>
+	<bean id="firstTask" class="com.ywq.ssm.quartz.task.FirstTask"></bean>
+	<bean id="secondTask" class="com.ywq.ssm.quartz.task.SecondTask"></bean>
+</beans>

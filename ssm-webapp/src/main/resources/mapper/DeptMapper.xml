@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ywq.ssm.mapper.DeptMapper">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"></cache>
+	<resultMap type="dept" id="deptResult">
+		<result column="dept_id" property="deptId"/>
+		<result column="dept_name" property="deptName"/>
+		
+		<result column="parent_id" property="parentId"/>
+	</resultMap>
+	
+	<select id="selectDept" resultMap="deptResult">
+		select dept_id,dept_name,parent_id
+		from ssm_dept
+	</select>
+	
+	<select id="selectDeptById" parameterType="String" resultMap="deptResult">
+		select dept_id,dept_name,parent_id
+		from ssm_dept where dept_id = #{dept_id}
+	</select>
+	
+	<insert id="insertDept" parameterType="dept">
+		insert into ssm_dept(dept_id,dept_name,parent_id) 
+		values(#{deptId},#{deptName},#{parentDept.deptId})
+	</insert>
+
+
+
+</mapper>

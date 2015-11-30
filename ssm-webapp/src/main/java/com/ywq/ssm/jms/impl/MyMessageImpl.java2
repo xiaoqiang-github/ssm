@@ -1,0 +1,43 @@
+package com.ywq.ssm.jms.impl;
+
+import javax.annotation.Resource;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
+import org.springframework.stereotype.Service;
+
+import com.ywq.ssm.jms.MyMessage;
+
+/**
+ * 消息发送服务类
+ * @author yangWeiQiang
+ *
+ */
+@Service(value="myMessage")
+public class MyMessageImpl implements MyMessage {
+
+	@Resource(name="jmsTemplate")
+	private JmsTemplate jmsTemplate;
+	
+	/**
+	 * 将消息发送到目的地
+	 * @param destination 目的地
+	 * @param msg 文本消息
+	 */
+	@Override
+	public void sendMessage(Destination destination,final String msg) {
+		System.out.println("----生产者开始发送消息-----");
+		System.out.println("----------------发送消息----"+msg);
+		jmsTemplate.send(destination, new MessageCreator() {
+			@Override
+			public Message createMessage(Session paramSession) throws JMSException {
+				return paramSession.createTextMessage(msg);
+			}
+		});
+	}
+
+}

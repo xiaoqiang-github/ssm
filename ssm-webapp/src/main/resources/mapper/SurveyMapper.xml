@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ywq.ssm.mapper.SurveyMapper">
+
+	<resultMap type="survey" id="surveyResult">
+		<result column="survey_id" property="surveyId"/>
+		<result column="survey_name" property="surveyName"/>
+		<result column="memo" property="memo"/>
+		<result column="start_time" property="startTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="creator" property="creator"/>
+	</resultMap>
+
+	<resultMap type="survey" id="surveyDetailsResult" extends="surveyResult">
+	
+		<collection property="opticList" ofType="com.ywq.ssm.model.Optic">
+			<result column="optic_id" property="opticId"/>
+			<result column="optic_name" property="opticName"/>
+			<result column="optic_index" property="opticIndex"/>
+			<result column="optic_weight" property="opticWeight"/>
+			
+			<collection property="optionList" ofType="com.ywq.ssm.model.Option">
+				<result column="option_id" property="optionId"/>
+				<result column="option_name" property="optionName"/>
+				<result column="option_index" property="optionIndex"/>
+				<result column="option_weight" property="optionWeight"/>
+			</collection>
+		</collection>
+	</resultMap>
+
+	<sql id="pageHeader">
+		select a.* from (
+	</sql>
+	<sql id="pageFooter">
+		)a limit #{page.startRow} , #{page.endRow}
+	</sql>
+	<sql id="countHeader">
+		select count(1) from (
+	</sql>
+	<sql id="countFooter">
+		)a
+	</sql>
+
+	<select id="selectSurveyByCondition" parameterType="java.util.Map" resultMap="surveyResult">
+		<include refid="pageHeader"/>
+		select * from ssm_survey 
+		<where>
+			<if test="survey.surveyName!=null and survey.surveyName!=''">
+				and survey_name like '%${survey.surveyName}%'
+			</if>
+		</where>
+		<include refid="pageFooter"/>
+	</select>
+
+	<select id="countSurveyByCondition" parameterType="java.util.Map" resultType="java.lang.Long">
+		<include refid="countHeader"/>
+		select * from ssm_survey 
+		<where>
+			<if test="survey.surveyName!=null and survey.surveyName!=''">
+				and survey_name like '%${survey.surveyName}%'
+			</if>
+		</where>
+		<include refid="countFooter"/>
+	</select>
+
+
+	<select id="selectSurveyDetailById" parameterType="String" resultMap="surveyDetailsResult">
+		select 
+		a.survey_id,a.survey_name,a.memo,a.start_time,a.end_time,
+		b.optic_id,b.optic_name,b.optic_index,b.optic_weight,
+		c.option_id,c.option_name,c.option_index,c.option_weight
+		from ssm_survey a 
+		inner join ssm_optic b on a.survey_id = b.survey_id 
+		inner join ssm_option c on c.optic_id = b.optic_id
+		where a.survey_id = #{surveyId}
+	</select>
+
+	<insert id="insertSurvey" parameterType="survey">
+		insert into ssm_survey(survey_id,survey_name,memo,start_time,end_time,creator,create_time) 
+		values(#{surveyId},#{surveyName},#{memo},#{startTime},#{endTime},#{creator},#{createTime})
+	</insert>
+
+	<insert id="initData">
+		insert into ssm_survey(survey_id,survey_name,memo,start_time,end_time,creator,create_time)
+		values('111','大众饮食安全问题','您的饮食卫生吗？','2015-07-01','2015-07-31','admin','2015-07-01 13:11:12');
+		
+		insert into ssm_optic(optic_id,survey_id,optic_name,optic_index,optic_weight,score)
+		values('222','111','您平时是自己做饭吗？',1,40,30);
+		insert into ssm_optic(optic_id,survey_id,optic_name,optic_index,optic_weight,score)
+		values('333','111','您会吃路边的小吃吗？',2,30,20);
+		
+		insert into ssm_option(option_id,optic_id,option_name,option_index,option_weight)
+		value('444','222','做',1,0.7);
+		insert into ssm_option(option_id,optic_id,option_name,option_index,option_weight)
+		value('555','222','不做',2,0.3);
+		insert into ssm_option(option_id,optic_id,option_name,option_index,option_weight)
+		value('666','333','会',1,0.4);
+		insert into ssm_option(option_id,optic_id,option_name,option_index,option_weight)
+		value('777','333','不会',1,0.6);
+	</insert>
+
+</mapper>

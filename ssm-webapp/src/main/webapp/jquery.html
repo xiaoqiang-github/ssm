@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="scripts/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var id = $("div[class='div1'] ul .li2 a").attr("id");
+		console.info(id);
+	});
+</script>
+</head>
+<body>
+<div class="div1">
+	<ul class="ul1">
+		<li class="li1">
+			<a href="http://www.baidu.com" id="a1"></a>
+		</li>
+		<li class="li2">
+			<a id="a2"></a>
+		</li>
+	</ul>
+</div>
+<div></div>
+</body>
+</html>

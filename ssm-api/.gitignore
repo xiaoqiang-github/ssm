@@ -1,0 +1,10 @@
+.settings/
+target/
+*.class
+
+.project
+.classpath
+.mymetadata
+.myumldata
+
+classes/

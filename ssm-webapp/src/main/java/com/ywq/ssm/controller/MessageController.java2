@@ -1,0 +1,31 @@
+package com.ywq.ssm.controller;
+
+import javax.annotation.Resource;
+import javax.jms.Destination;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.ywq.ssm.jms.MyMessage;
+/**
+ * 发送消息
+ * @author yangWeiQiang
+ *
+ */
+
+@Controller
+@RequestMapping(value="message")
+public class MessageController {
+
+	@Resource(name="queueDestination")
+	private Destination destination;
+	
+	@Resource(name="myMessage")
+	private MyMessage myMessage;
+	
+	@RequestMapping(value="sendMsg/{msg}")
+	public void sendMsg(@PathVariable String msg){
+		myMessage.sendMessage(destination, msg);
+	}
+}
