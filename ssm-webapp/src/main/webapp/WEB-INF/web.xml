@@ -8,7 +8,10 @@
 	<!-- 加载spring容器 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/applicationContext.xml</param-value>
+		<param-value>
+			classpath:spring/applicationContext.xml,
+			classpath:dubbo/*.xml
+		</param-value>
 	</context-param>
 
 	<!-- post乱码过虑器 -->
