@@ -12,9 +12,9 @@ public class StartServer {
 	 */
 	public static void main(String[] args) throws Exception {
 		ClassPathXmlApplicationContext context = 
-			new ClassPathXmlApplicationContext(new String[]{"dubbo-beans.xml"});
+			new ClassPathXmlApplicationContext(new String[]{"dubbo-provider.xml"});
 		context.start();
-		
+		System.out.println("---服务提供方启动成功----");
 		System.in.read();
 	}
 
